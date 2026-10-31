@@ -28,6 +28,52 @@ echo "Signing with: $IDENTITY"
 codesign --force --options runtime --sign "$IDENTITY" "$APP"
 echo "Built $APP"
 
-# Release zip (what the in-app updater downloads)
-(cd build && rm -f Snappy.zip && ditto -ck --keepParent Snappy.app Snappy.zip)
-echo "Packaged build/Snappy.zip (version $VERSION)"
+# --- Notarization (optional): NOTARY_PROFILE=<notarytool keychain profile> ---
+notarize() { # $1 = file (zip or dmg)
+  xcrun notarytool submit "$1" --keychain-profile "$NOTARY_PROFILE" --wait
+}
+cd build
+if [ -n "$NOTARY_PROFILE" ]; then
+  rm -f notarize.zip && ditto -ck --keepParent Snappy.app notarize.zip
+  notarize notarize.zip && rm notarize.zip
+  xcrun stapler staple Snappy.app
+fi
+
+# Zip (used by the in-app updater)
+rm -f Snappy.zip && ditto -ck --keepParent Snappy.app Snappy.zip
+
+# DMG with drag-to-Applications layout
+rm -rf dmg-stage Snappy.dmg Snappy-rw.dmg
+mkdir dmg-stage && cp -R Snappy.app dmg-stage/ && ln -s /Applications dmg-stage/Applications
+hdiutil create -quiet -volname Snappy -srcfolder dmg-stage -fs HFS+ -format UDRW Snappy-rw.dmg
+DEV=$(hdiutil attach -readwrite -noverify -noautoopen Snappy-rw.dmg | awk '/Apple_HFS/ {print $1}')
+# Icon-view layout: app on the left, Applications on the right (best effort; needs Finder automation)
+osascript <<OSA >/dev/null 2>&1 || echo "note: Finder layout skipped"
+tell application "Finder"
+  tell disk "Snappy"
+    open
+    set current view of container window to icon view
+    set toolbar visible of container window to false
+    set statusbar visible of container window to false
+    set the bounds of container window to {200, 120, 740, 460}
+    set opts to the icon view options of container window
+    set arrangement of opts to not arranged
+    set icon size of opts to 112
+    set position of item "Snappy.app" of container window to {150, 160}
+    set position of item "Applications" of container window to {390, 160}
+    close
+    open
+    update without registering applications
+    delay 1
+    close
+  end tell
+end tell
+OSA
+sync; hdiutil detach -quiet "$DEV"
+hdiutil convert -quiet Snappy-rw.dmg -format UDZO -o Snappy.dmg
+rm -rf Snappy-rw.dmg dmg-stage
+if [ "$IDENTITY" != "-" ]; then codesign --force --sign "$IDENTITY" Snappy.dmg; fi
+if [ -n "$NOTARY_PROFILE" ]; then notarize Snappy.dmg && xcrun stapler staple Snappy.dmg; fi
+cd ..
+echo "Packaged build/Snappy.dmg and build/Snappy.zip (version $VERSION)"
+[ -n "$NOTARY_PROFILE" ] || echo "WARNING: not notarized (set NOTARY_PROFILE) - Gatekeeper will warn on download"
