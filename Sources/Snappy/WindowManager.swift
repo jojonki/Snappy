@@ -57,7 +57,7 @@ enum WindowManager {
         return toAppKit(CGRect(origin: pos, size: size))
     }
 
-    static func setFrame(_ window: AXUIElement, to appKitFrame: NSRect) {
+    static func setFrame(_ window: AXUIElement, to appKitFrame: NSRect, anchoredRight: Bool = false) {
         var r = toAX(appKitFrame)
         // Size first, then position, then size again (some apps clamp size based on position).
         func setSize() {
@@ -70,6 +70,16 @@ enum WindowManager {
             AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, v)
         }
         setSize()
+
+        // Some apps enforce a minimum size larger than requested. Read back the real size
+        // and keep the intended edge anchored so the window stays on-screen and flush.
+        if anchoredRight, let actual = frame(of: window), abs(actual.width - appKitFrame.width) > 1 {
+            var origin = toAX(NSRect(x: appKitFrame.maxX - actual.width, y: appKitFrame.minY,
+                                     width: actual.width, height: actual.height)).origin
+            if let v = AXValueCreate(.cgPoint, &origin) {
+                AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, v)
+            }
+        }
     }
 
     static func screen(containing rect: NSRect) -> NSScreen? {
@@ -81,10 +91,10 @@ enum WindowManager {
     static func snapFocusedWindow(to zone: SnapZone) {
         guard isTrusted(prompt: false), let win = focusedWindow(), let f = frame(of: win),
               let screen = screen(containing: f) else { return }
-        setFrame(win, to: zone.frame(in: screen.visibleFrame))
+        setFrame(win, to: zone.frame(in: screen.visibleFrame), anchoredRight: zone == .right)
     }
 
     static func snap(_ window: AXUIElement, to zone: SnapZone, on screen: NSScreen) {
-        setFrame(window, to: zone.frame(in: screen.visibleFrame))
+        setFrame(window, to: zone.frame(in: screen.visibleFrame), anchoredRight: zone == .right)
     }
 }
