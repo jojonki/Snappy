@@ -20,7 +20,12 @@ cat > "$APP/Contents/Info.plist" <<PL
 <key>LSUIElement</key><true/>
 </dict></plist>
 PL
-codesign --force --sign - "$APP"
+# Stable signing keeps the Accessibility permission valid across rebuilds.
+# Override with SIGN_IDENTITY="-" for ad-hoc.
+IDENTITY="${SIGN_IDENTITY:-$(security find-identity -v -p codesigning | sed -n 's/.*"\(Developer ID Application:[^"]*\)".*/\1/p' | head -1)}"
+IDENTITY="${IDENTITY:--}"
+echo "Signing with: $IDENTITY"
+codesign --force --options runtime --sign "$IDENTITY" "$APP"
 echo "Built $APP"
 
 # Release zip (what the in-app updater downloads)

@@ -79,7 +79,7 @@ enum WindowManager {
 
     // MARK: Snapping
     static func snapFocusedWindow(to zone: SnapZone) {
-        guard isTrusted(prompt: true), let win = focusedWindow(), let f = frame(of: win),
+        guard isTrusted(prompt: false), let win = focusedWindow(), let f = frame(of: win),
               let screen = screen(containing: f) else { return }
         setFrame(win, to: zone.frame(in: screen.visibleFrame))
     }
