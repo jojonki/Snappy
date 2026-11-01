@@ -9,6 +9,7 @@
 <p align="center">
   <a href="https://github.com/jojonki/Snappy/releases/latest"><img src="https://img.shields.io/github/v/release/jojonki/Snappy" alt="Latest release"></a>
   <img src="https://img.shields.io/badge/macOS-13%2B-blue" alt="macOS">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"></a>
   <a href="https://github.com/sponsors/jojonki"><img src="https://img.shields.io/github/sponsors/jojonki?label=Sponsor&logo=GitHub" alt="Sponsor"></a>
 </p>
 
@@ -60,3 +61,7 @@ If Snappy is useful to you, please consider [sponsoring me on GitHub](https://gi
 You can also reach it from the menu bar: **Support the Developer ♥**.
 
 Bug reports and feature requests are welcome in [Issues](https://github.com/jojonki/Snappy/issues).
+
+## License
+
+[MIT](LICENSE) © Junki Ohmura
