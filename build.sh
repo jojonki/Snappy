@@ -45,7 +45,7 @@ notarize() { # $1 = file (zip or dmg)
 cd build
 if [ -n "$NOTARY_PROFILE" ]; then
   rm -f notarize.zip && ditto -ck --keepParent Snappy.app notarize.zip
-  notarize notarize.zip && rm notarize.zip
+  notarize notarize.zip; rm notarize.zip
   xcrun stapler staple Snappy.app
 fi
 
