@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshot.svg" width="760" alt="Snappy menu with two windows snapped side by side">
+  <img src="docs/demo.gif" width="760" alt="Snapping windows by dragging to the screen edge and with ⌃⌘→, ⌃⌘↑ and ⌃⌘←">
 </p>
 
 ## Features
@@ -24,6 +24,10 @@
 - Hide the frontmost app with a shortcut
 - Automatic update check from GitHub Releases
 - Quick links to this repository and to sponsorship from the menu
+
+<p align="center">
+  <img src="docs/screenshot.svg" width="760" alt="Snappy menu with two windows snapped side by side">
+</p>
 
 ## Default shortcuts
 
