@@ -29,9 +29,9 @@
 
 | Action       | Shortcut |
 |--------------|----------|
-| Left Half    | ⌃⌥←      |
-| Right Half   | ⌃⌥→      |
-| Full Screen  | ⌃⌥↑      |
+| Left Half    | ⌃⌘←      |
+| Right Half   | ⌃⌘→      |
+| Full Screen  | ⌃⌘↑      |
 | Hide App     | None     |
 
 Change them in **Settings…** from the menu bar icon.

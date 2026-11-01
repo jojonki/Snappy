@@ -33,7 +33,7 @@
       <rect x="32" y="190" width="380" height="140" rx="8" fill="#2a3040"/>
       <rect x="32" y="350" width="300" height="10" rx="5" fill="#2f3542"/>
       <rect x="32" y="372" width="350" height="10" rx="5" fill="#2f3542"/>
-      <text x="222" y="470" text-anchor="middle" font-size="15" fill="#8b93a7">Left Half  ⌃⌥←</text>
+      <text x="222" y="470" text-anchor="middle" font-size="15" fill="#8b93a7">Left Half  ⌃⌘←</text>
     </g>
     <!-- right snapped window -->
     <g filter="url(#sh)">
@@ -44,17 +44,17 @@
       <rect x="468" y="88" width="180" height="10" rx="5" fill="#cfd3dc"/>
       <rect x="468" y="110" width="360" height="10" rx="5" fill="#dde0e6"/>
       <rect x="468" y="132" width="300" height="10" rx="5" fill="#dde0e6"/>
-      <text x="658" y="470" text-anchor="middle" font-size="15" fill="#8b93a7">Right Half  ⌃⌥→</text>
+      <text x="658" y="470" text-anchor="middle" font-size="15" fill="#8b93a7">Right Half  ⌃⌘→</text>
     </g>
 
     <!-- dropdown menu -->
     <g filter="url(#sh)">
       <rect x="600" y="28" width="264" height="300" rx="9" fill="#2a2d34" fill-opacity=".97" stroke="#444" stroke-width="1"/>
       <g font-size="13" fill="#eceff4">
-        <text x="620" y="52">Left Half</text><text x="848" y="52" text-anchor="end" fill="#9aa1ad">⌃⌥←</text>
+        <text x="620" y="52">Left Half</text><text x="848" y="52" text-anchor="end" fill="#9aa1ad">⌃⌘←</text>
         <rect x="606" y="62" width="252" height="22" rx="5" fill="#2f6fed"/>
-        <text x="620" y="77" fill="#fff">Right Half</text><text x="848" y="77" text-anchor="end" fill="#fff">⌃⌥→</text>
-        <text x="620" y="102">Full Screen</text><text x="848" y="102" text-anchor="end" fill="#9aa1ad">⌃⌥↑</text>
+        <text x="620" y="77" fill="#fff">Right Half</text><text x="848" y="77" text-anchor="end" fill="#fff">⌃⌘→</text>
+        <text x="620" y="102">Full Screen</text><text x="848" y="102" text-anchor="end" fill="#9aa1ad">⌃⌘↑</text>
         <text x="620" y="127">Hide App</text>
         <line x1="612" y1="138" x2="852" y2="138" stroke="#4a4e57"/>
         <text x="606" y="158" font-size="11">✓</text><text x="620" y="158">Snap on Drag</text>

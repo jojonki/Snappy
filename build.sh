@@ -1,7 +1,7 @@
 #!/bin/bash
 # Builds Snappy.app (menu bar app) into ./build
 set -e
-VERSION="${VERSION:-0.1.1}"
+VERSION="${VERSION:-0.1.2}"
 cd "$(dirname "$0")"
 swift build -c release
 APP=build/Snappy.app

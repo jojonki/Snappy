@@ -7,7 +7,7 @@ struct Shortcut: Codable, Equatable {
 
     /// Default shortcuts; actions absent here (e.g. hide) are unassigned by default.
     static let defaults: [ShortcutAction: Shortcut] = {
-        let m = controlKey | optionKey
+        let m = controlKey | cmdKey
         return [.left: Shortcut(keyCode: kVK_LeftArrow, modifiers: m),
                 .right: Shortcut(keyCode: kVK_RightArrow, modifiers: m),
                 .full: Shortcut(keyCode: kVK_UpArrow, modifiers: m)]
