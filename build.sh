@@ -1,18 +1,28 @@
 #!/bin/bash
 # Builds Snappy.app (menu bar app) into ./build
 set -e
-VERSION="${VERSION:-0.1.0}"
+VERSION="${VERSION:-0.1.1}"
 cd "$(dirname "$0")"
 swift build -c release
 APP=build/Snappy.app
 rm -rf "$APP"; mkdir -p "$APP/Contents/MacOS"
 cp .build/release/Snappy "$APP/Contents/MacOS/Snappy"
+strip -x "$APP/Contents/MacOS/Snappy"   # drop local symbols (~40% smaller); must precede codesign
+# App icon: Resources/icon.png -> AppIcon.icns
+mkdir -p "$APP/Contents/Resources"
+ICONSET=$(mktemp -d)/AppIcon.iconset; mkdir -p "$ICONSET"
+for s in 16 32 128 256 512; do
+  sips -z $s $s Resources/icon.png --out "$ICONSET/icon_${s}x${s}.png" >/dev/null
+  sips -z $((s*2)) $((s*2)) Resources/icon.png --out "$ICONSET/icon_${s}x${s}@2x.png" >/dev/null
+done
+iconutil -c icns "$ICONSET" -o "$APP/Contents/Resources/AppIcon.icns"
 cat > "$APP/Contents/Info.plist" <<PL
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
 <key>CFBundleExecutable</key><string>Snappy</string>
 <key>CFBundleIdentifier</key><string>com.jojonki.snappy</string>
+<key>CFBundleIconFile</key><string>AppIcon</string>
 <key>CFBundleName</key><string>Snappy</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>CFBundleVersion</key><string>1</string>

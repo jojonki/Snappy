@@ -2,15 +2,15 @@ import AppKit
 
 /// Button that records a key combo when clicked.
 final class ShortcutRecorder: NSButton {
-    var onChange: ((Shortcut) -> Void)?
+    var onChange: ((Shortcut?) -> Void)?
     private var monitor: Any?
-    var shortcut: Shortcut { didSet { title = shortcut.display } }
+    var shortcut: Shortcut? { didSet { title = shortcut?.display ?? "None" } }
 
-    init(shortcut: Shortcut) {
+    init(shortcut: Shortcut?) {
         self.shortcut = shortcut
         super.init(frame: .zero)
         bezelStyle = .rounded
-        title = shortcut.display
+        title = shortcut?.display ?? "None"
         target = self; action = #selector(toggle)
     }
     required init?(coder: NSCoder) { fatalError() }
@@ -18,10 +18,13 @@ final class ShortcutRecorder: NSButton {
     @objc private func toggle() { monitor == nil ? begin() : end() }
 
     private func begin() {
-        title = "Press shortcut… (Esc to cancel)"
+        title = "Press shortcut… (Esc cancel)"
         monitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] e in
             guard let self else { return e }
             if e.keyCode == 53 { self.end(); return nil }   // Esc
+            if e.keyCode == 51 || e.keyCode == 117 {        // Delete: clear (disable)
+                self.shortcut = nil; self.end(); self.onChange?(nil); return nil
+            }
             let mods = Shortcut.carbonModifiers(from: e.modifierFlags.intersection(.deviceIndependentFlagsMask))
             guard mods != 0 else { NSSound.beep(); return nil }   // require a modifier
             let s = Shortcut(keyCode: Int(e.keyCode), modifiers: mods)
@@ -32,18 +35,27 @@ final class ShortcutRecorder: NSButton {
         }
     }
 
+    func cancelRecording() { if monitor != nil { end() } }
+
     private func end() {
         if let m = monitor { NSEvent.removeMonitor(m); monitor = nil }
-        title = shortcut.display
+        title = shortcut?.display ?? "None"
     }
 }
 
+final class ClearHandler: NSObject {
+    let block: () -> Void
+    init(_ block: @escaping () -> Void) { self.block = block }
+    @objc func fire() { block() }
+}
+
 final class SettingsWindowController: NSWindowController {
-    private var recorders: [SnapZone: ShortcutRecorder] = [:]
+    private var recorders: [ShortcutAction: ShortcutRecorder] = [:]
+    private var clearHandlers: [ClearHandler] = []
     private let autoUpdate = NSButton(checkboxWithTitle: "Check for updates automatically", target: nil, action: nil)
 
     init() {
-        let win = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 380, height: 260),
+        let win = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 380, height: 300),
                            styleMask: [.titled, .closable], backing: .buffered, defer: false)
         win.title = "Snappy Settings"
         super.init(window: win)
@@ -55,12 +67,20 @@ final class SettingsWindowController: NSWindowController {
     private func build() {
         let grid = NSGridView()
         grid.rowSpacing = 10; grid.columnSpacing = 12
-        for zone in SnapZone.allCases {
-            let r = ShortcutRecorder(shortcut: ShortcutStore.get(zone))
-            r.onChange = { ShortcutStore.set($0, for: zone) }
-            recorders[zone] = r
+        for action in ShortcutAction.allCases {
+            let r = ShortcutRecorder(shortcut: ShortcutStore.get(action))
+            r.onChange = { ShortcutStore.set($0, for: action) }
+            recorders[action] = r
             r.widthAnchor.constraint(greaterThanOrEqualToConstant: 150).isActive = true
-            grid.addRow(with: [NSTextField(labelWithString: zone.title + ":"), r])
+            let none = NSButton(title: "None", target: nil, action: nil)
+            none.bezelStyle = .rounded
+            none.toolTip = "Disable this shortcut"
+            let clear = ClearHandler { [weak r] in
+                r?.cancelRecording(); r?.shortcut = nil; ShortcutStore.set(nil, for: action)
+            }
+            none.target = clear; none.action = #selector(ClearHandler.fire)
+            clearHandlers.append(clear)
+            grid.addRow(with: [NSTextField(labelWithString: action.title + ":"), r, none])
         }
         grid.column(at: 0).xPlacement = .trailing
 
@@ -80,10 +100,8 @@ final class SettingsWindowController: NSWindowController {
     }
 
     @objc private func resetDefaults() {
-        for zone in SnapZone.allCases {
-            ShortcutStore.set(nil, for: zone)
-            recorders[zone]?.shortcut = Shortcut.defaults[zone]!
-        }
+        ShortcutStore.resetAll()
+        for (action, r) in recorders { r.cancelRecording(); r.shortcut = Shortcut.defaults[action] }
     }
     @objc private func toggleAuto() { Updater.autoCheckEnabled = autoUpdate.state == .on }
     @objc private func checkNow() { Updater.shared.check(userInitiated: true) }
