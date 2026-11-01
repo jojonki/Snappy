@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="520" viewBox="0 0 880 520" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#0ea5e9"/>
+    </linearGradient>
+    <filter id="sh" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity=".35"/>
+    </filter>
+    <clipPath id="screen"><rect width="880" height="520" rx="14"/></clipPath>
+  </defs>
+  <g clip-path="url(#screen)">
+    <rect width="880" height="520" fill="url(#bg)"/>
+    <!-- menu bar -->
+    <rect width="880" height="26" fill="#000" fill-opacity=".35"/>
+    <text x="16" y="18" font-size="13" font-weight="600" fill="#fff">Finder</text>
+    <text x="72" y="18" font-size="13" fill="#fff">File  Edit  View  Go  Window  Help</text>
+    <text x="864" y="18" font-size="13" fill="#fff" text-anchor="end">Sun 9:41</text>
+    <!-- status icon (highlighted) -->
+    <rect x="736" y="3" width="28" height="20" rx="5" fill="#fff" fill-opacity=".25"/>
+    <rect x="742" y="8" width="16" height="10" rx="2" fill="none" stroke="#fff" stroke-width="1.5"/>
+    <line x1="750" y1="8" x2="750" y2="18" stroke="#fff" stroke-width="1.5"/>
+
+    <!-- left snapped window -->
+    <g filter="url(#sh)">
+      <rect x="8" y="34" width="428" height="478" rx="10" fill="#1f2430"/>
+      <rect x="8" y="34" width="428" height="30" rx="10" fill="#2b313f"/>
+      <rect x="8" y="54" width="428" height="10" fill="#2b313f"/>
+      <circle cx="26" cy="49" r="6" fill="#ff5f57"/><circle cx="46" cy="49" r="6" fill="#febc2e"/><circle cx="66" cy="49" r="6" fill="#28c840"/>
+      <rect x="32" y="88" width="220" height="10" rx="5" fill="#3b4252"/>
+      <rect x="32" y="110" width="360" height="10" rx="5" fill="#2f3542"/>
+      <rect x="32" y="132" width="320" height="10" rx="5" fill="#2f3542"/>
+      <rect x="32" y="154" width="340" height="10" rx="5" fill="#2f3542"/>
+      <rect x="32" y="190" width="380" height="140" rx="8" fill="#2a3040"/>
+      <rect x="32" y="350" width="300" height="10" rx="5" fill="#2f3542"/>
+      <rect x="32" y="372" width="350" height="10" rx="5" fill="#2f3542"/>
+      <text x="222" y="470" text-anchor="middle" font-size="15" fill="#8b93a7">Left Half  ⌃⌥←</text>
+    </g>
+    <!-- right snapped window -->
+    <g filter="url(#sh)">
+      <rect x="444" y="34" width="428" height="478" rx="10" fill="#f5f6f8"/>
+      <rect x="444" y="34" width="428" height="30" rx="10" fill="#e4e6eb"/>
+      <rect x="444" y="54" width="428" height="10" fill="#e4e6eb"/>
+      <circle cx="462" cy="49" r="6" fill="#ff5f57"/><circle cx="482" cy="49" r="6" fill="#febc2e"/><circle cx="502" cy="49" r="6" fill="#28c840"/>
+      <rect x="468" y="88" width="180" height="10" rx="5" fill="#cfd3dc"/>
+      <rect x="468" y="110" width="360" height="10" rx="5" fill="#dde0e6"/>
+      <rect x="468" y="132" width="300" height="10" rx="5" fill="#dde0e6"/>
+      <text x="658" y="470" text-anchor="middle" font-size="15" fill="#8b93a7">Right Half  ⌃⌥→</text>
+    </g>
+
+    <!-- dropdown menu -->
+    <g filter="url(#sh)">
+      <rect x="600" y="28" width="264" height="300" rx="9" fill="#2a2d34" fill-opacity=".97" stroke="#444" stroke-width="1"/>
+      <g font-size="13" fill="#eceff4">
+        <text x="620" y="52">Left Half</text><text x="848" y="52" text-anchor="end" fill="#9aa1ad">⌃⌥←</text>
+        <rect x="606" y="62" width="252" height="22" rx="5" fill="#2f6fed"/>
+        <text x="620" y="77" fill="#fff">Right Half</text><text x="848" y="77" text-anchor="end" fill="#fff">⌃⌥→</text>
+        <text x="620" y="102">Full Screen</text><text x="848" y="102" text-anchor="end" fill="#9aa1ad">⌃⌥↑</text>
+        <text x="620" y="127">Hide App</text>
+        <line x1="612" y1="138" x2="852" y2="138" stroke="#4a4e57"/>
+        <text x="606" y="158" font-size="11">✓</text><text x="620" y="158">Snap on Drag</text>
+        <line x1="612" y1="169" x2="852" y2="169" stroke="#4a4e57"/>
+        <text x="620" y="189">Settings…</text><text x="848" y="189" text-anchor="end" fill="#9aa1ad">⌘,</text>
+        <text x="620" y="213">Check for Updates…</text>
+        <line x1="612" y1="224" x2="852" y2="224" stroke="#4a4e57"/>
+        <text x="620" y="244">Snappy on GitHub</text>
+        <text x="620" y="268">Support the Developer ♥</text>
+        <line x1="612" y1="279" x2="852" y2="279" stroke="#4a4e57"/>
+        <text x="620" y="300">Quit Snappy</text><text x="848" y="300" text-anchor="end" fill="#9aa1ad">⌘Q</text>
+      </g>
+    </g>
+  </g>
+</svg>
